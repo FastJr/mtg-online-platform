@@ -1,0 +1,31 @@
+/* src/styles/Home.css */
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+  }
+  
+  .main-content {
+    margin-left: 25%;
+    padding: 20px;
+  }
+
+    /* Adjust main-content margin to account for the fixed sidebar */
+    .main-content {
+        margin-left: 25%;
+        padding: 20px;
+    }
+
+    /* src/pages/HomePage.css */
+    .main-content {
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+  
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
