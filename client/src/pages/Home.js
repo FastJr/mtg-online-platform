@@ -15,6 +15,9 @@ function Home() {
   const [rooms, setRooms] = useState([]);
   const [decks, setDecks] = useState([]);
 
+  const [roomName, setRoomName] = useState('');
+  const [roomPrivacy, setRoomPrivacy] = useState('Public');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,16 +42,13 @@ function Home() {
       });
   }, []);
 
-  const [roomName, setRoomName] = useState('');
-const [roomPrivacy, setRoomPrivacy] = useState('Public');
-
 const handleCreateRoom = () => {
   // Build the room data object
   const newRoom = {
     name: roomName,
     privacy: roomPrivacy,
     hostName: user.name, // Assuming `user.name` contains the host's name
-    occupants: 1, // Since the host is the first occupant
+    occupants: 0, // Since the host is the first occupant
   };
 
   // Send the room data to the backend
@@ -75,8 +75,8 @@ const handleCreateRoom = () => {
         <Col xs={12} md={3} className="sidebar">
           <div className="d-flex flex-column align-items-start px-3">
             <Button
-              variant="primary"
-              className="mb-3"
+              variant=""
+              className="nav-button button-newRoom mb-3"
               onClick={() => {
                 console.log('New Room button clicked');
                 if (isAuthenticated) {
@@ -90,14 +90,15 @@ const handleCreateRoom = () => {
               New Room
             </Button>
             <Button
-              variant="secondary"
-              className="mb-3"
+              variant=""
+              className="nav-button button-decks mb-3"
               onClick={() => setShowDecksModal(true)}
             >
               Decks
             </Button>
             <Button
-              variant="outline-primary"
+              variant=""
+              className="nav-button button-login mb-3"
               onClick={() => {
                 if (isAuthenticated) {
                   logout({ returnTo: window.location.origin });
@@ -113,30 +114,28 @@ const handleCreateRoom = () => {
 
         {/* Main Content Area */}
         <Col xs={12} md={9} className="main-content">
-          <div className="d-flex justify-content-between align-items-center">
-            <h2>Rooms</h2>
-            <div>
-              {isAuthenticated ? (
-                <span>
-                  Signed in as <strong>{user.name}</strong>
-                </span>
-              ) : (
-                <span>Not signed in</span>
-              )}
-            </div>
-          </div>
-          <div className="rooms-list mt-4">
+        <div className="title-container">
+            <h1 className="site-title">Replacement Effect</h1>
+            <h4 className="rooms-title">Join or Create a Room to Play Some Commander!</h4>
+        </div>
+        <div className="rooms-list mt-4">
             {rooms.map((room) => (
-                <div key={room.id} className="room-item p-3 mb-3 border rounded">
-                    <h5>{room.name}</h5>
-                    <p>Occupants: {room.occupants}</p>
-                    <p>Host: {room.hostName}</p>
-                    <Button variant="success" onClick={() => navigate(`/room/${room.id}`)}>
+            <div key={room.id} className="room-item">
+                <div className="room-details">
+                <span className="room-host">{room.hostName}</span>
+                <span className="room-occupants">{room.occupants}</span>
+                <span className="room-name">{room.name}</span>
+                <span className="room-privacy">{room.privacy}</span>
+                <Button
+                    className="join-button"
+                    onClick={() => navigate(`/room/${room.id}`)}
+                >
                     Join Room
-                    </Button>
+                </Button>
                 </div>
-                ))}
-          </div>
+            </div>
+            ))}
+        </div>
         </Col>
       </Row>
 

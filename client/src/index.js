@@ -13,6 +13,8 @@ root.render(
     domain="dev-1blwqc7ms7ys8cym.us.auth0.com"
     clientId="GzALtx413Sb9vqdRogyusLMJJKIkKmTe"
     redirectUri={window.location.origin}
+    cacheLocation="localstorage" // Store session in localStorage
+    useRefreshTokens={true}      // Use refresh tokens for long-lived sessions
   >
     <App />
   </Auth0Provider>
