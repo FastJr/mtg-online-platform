@@ -42,31 +42,26 @@ function Home() {
       });
   }, []);
 
-const handleCreateRoom = () => {
-  // Build the room data object
-  const newRoom = {
-    name: roomName,
-    privacy: roomPrivacy,
-    hostName: user.name, // Assuming `user.name` contains the host's name
-    occupants: 0, // Since the host is the first occupant
+  const handleCreateRoom = () => {
+    const newRoom = {
+      name: roomName,
+      privacy: roomPrivacy,
+      hostName: user.nickname, // Using user's nickname from Auth0 as the host
+      occupants: [], // Initialize occupants as an empty array
+    };
+  
+    axios
+      .post('/api/rooms', newRoom)
+      .then((response) => {
+        setRooms([...rooms, response.data]); // Update rooms with the new room
+        setShowNewRoomModal(false);
+        setRoomName(''); // Reset form fields
+        setRoomPrivacy('Public');
+      })
+      .catch((error) => {
+        console.error('Error creating room:', error);
+      });
   };
-
-  // Send the room data to the backend
-  axios
-    .post('/api/rooms', newRoom)
-    .then((response) => {
-      // Update the rooms list with the new room
-      setRooms([...rooms, response.data]);
-      // Close the modal
-      setShowNewRoomModal(false);
-      // Reset form fields
-      setRoomName('');
-      setRoomPrivacy('Public');
-    })
-    .catch((error) => {
-      console.error('Error creating room:', error);
-    });
-};
 
   return (
     <Container fluid>
@@ -123,7 +118,7 @@ const handleCreateRoom = () => {
             <div key={room.id} className="room-item">
                 <div className="room-details">
                 <span className="room-host">{room.hostName}</span>
-                <span className="room-occupants">{room.occupants}</span>
+                <span className="room-occupants">{room.occupants.length}</span>
                 <span className="room-name">{room.name}</span>
                 <span className="room-privacy">{room.privacy}</span>
                 <Button
