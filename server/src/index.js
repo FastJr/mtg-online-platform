@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 const roomsRouter = require('./routes/rooms');
+const decksRouter = require('./routes/decks');
+const usersRouter = require('./routes/users');
 const http = require('http');
 const { Server } = require('socket.io');
 const PORT = 5000;
@@ -38,6 +40,8 @@ app.use(express.json());
 
 // Use the rooms route
 app.use('/api/rooms', roomsRouter);
+app.use('/api/decks', decksRouter);
+app.use('/api/users', usersRouter);
 
 // Connect to MongoDB
 mongoose

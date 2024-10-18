@@ -1,26 +1,26 @@
-import React, { useEffect } from 'react';
+// src/pages/Room.js
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import io from 'socket.io-client';
-
-const socket = io.connect('http://localhost:5000');
+import axios from 'axios';
 
 function Room() {
-  const { roomId } = useParams();
+  const { roomId } = useParams(); // Extract roomId from the URL
+  const [room, setRoom] = useState(null);
 
   useEffect(() => {
-    // Join the room
-    socket.emit('join_room', roomId);
-
-    // Clean up on unmount
-    return () => {
-      socket.disconnect();
-    };
+    axios.get(`/api/rooms/${roomId}`)
+      .then((response) => setRoom(response.data))
+      .catch((error) => console.error('Error fetching room:', error));
   }, [roomId]);
+
+  if (!room) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <h1>Welcome to Room {roomId}</h1>
-      {/* Implement the game interface here */}
+      <h1>{room.name}</h1>
+      <p>Room details here...</p>
     </div>
   );
 }
